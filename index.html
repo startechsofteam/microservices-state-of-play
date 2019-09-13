@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<meta name="author" content="Thomas SCHWENDER">
+<title>Microservices : un état des lieux</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment @import statement to use as custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*::before,*::after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite::before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
+:not(pre)>code.nobreak{word-wrap:normal}
+:not(pre)>code.nowrap{white-space:nowrap}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:100%;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details>summary:first-of-type{cursor:pointer;display:list-item;outline:none;margin-bottom:.75em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class="highlight"],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos{border-right:1px solid currentColor;opacity:.35;padding-right:.5em}
+pre.pygments .lineno{border-right:1px solid currentColor;opacity:.35;display:inline-block;margin-right:.75em}
+pre.pygments .lineno::before{content:"";margin-right:-.125em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;text-align:left;margin-right:0}
+table.tableblock{max-width:100%;border-collapse:separate}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+td.tableblock>.content>:last-child.sidebarblock{margin-bottom:0}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>thead>tr>.tableblock,table.grid-all>tbody>tr>.tableblock{border-width:0 1px 1px 0}
+table.grid-all>tfoot>tr>.tableblock{border-width:1px 1px 0 0}
+table.grid-cols>*>tr>.tableblock{border-width:0 1px 0 0}
+table.grid-rows>thead>tr>.tableblock,table.grid-rows>tbody>tr>.tableblock{border-width:0 0 1px}
+table.grid-rows>tfoot>tr>.tableblock{border-width:1px 0 0}
+table.grid-all>*>tr>.tableblock:last-child,table.grid-cols>*>tr>.tableblock:last-child{border-right-width:0}
+table.grid-all>tbody>tr:last-child>.tableblock,table.grid-all>thead:last-child>tr>.tableblock,table.grid-rows>tbody>tr:last-child>.tableblock,table.grid-rows>thead:last-child>tr>.tableblock{border-bottom-width:0}
+table.frame-all{border-width:1px}
+table.frame-sides{border-width:0 1px}
+table.frame-topbot,table.frame-ends{border-width:1px 0}
+table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
+ul.inline{display:-ms-flexbox;display:-webkit-box;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media print,amzn-kf8{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>Microservices : un état des lieux</h1>
+<div class="details">
+<span id="author" class="author">Thomas SCHWENDER</span><br>
+<span id="email" class="email"><a href="https://github.com/ardemius">@ardemius</a></span><br>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div id="toc" class="toc">
+<div id="toctitle" class="title">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_microservices_un_rien_dhistoire_et_de_contexte">Microservices : un rien d&#8217;histoire et de contexte</a>
+<ul class="sectlevel2">
+<li><a href="#_linspiration_des_microservices">L&#8217;inspiration des microservices</a></li>
+<li><a href="#_architecture_hexagonale">Architecture hexagonale</a></li>
+<li><a href="#_isolation">Isolation</a></li>
+<li><a href="#_pourquoi_les_microservices">Pourquoi les microservices ?</a></li>
+</ul>
+</li>
+<li><a href="#_principaux_use_cases">Principaux Use Cases</a>
+<ul class="sectlevel2">
+<li><a href="#_approche_cloud_native">Approche Cloud-native</a></li>
+</ul>
+</li>
+<li><a href="#_capability_model">Capability model</a>
+<ul class="sectlevel2">
+<li><a href="#_microservice_core">Microservice "core"</a></li>
+<li><a href="#_api">API</a></li>
+<li><a href="#_service_discovery">Service Discovery</a></li>
+<li><a href="#_load_balancer">Load Balancer</a></li>
+<li><a href="#_api_gateway">API gateway</a></li>
+<li><a href="#_communication_entre_microservices">Communication entre microservices</a></li>
+<li><a href="#_configuration_management">Configuration management</a></li>
+<li><a href="#_design_for_failure">Design for failure</a></li>
+<li><a href="#_logging_et_tracing">Logging et tracing</a></li>
+<li><a href="#_sécurité">Sécurité</a></li>
+<li><a href="#_patterns_de_build_et_de_déploiement">Patterns de build et de déploiement</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Cet article se base sur le talk <a href="https://www.youtube.com/watch?v=2VH8rQSKdk0">Microservices: Infinity War! Spring vs MicroProfile</a> que j&#8217;ai donné à <strong>Devoxx France 2019</strong> avec ma collègue Darren Boutros.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_microservices_un_rien_dhistoire_et_de_contexte">Microservices : un rien d&#8217;histoire et de contexte</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>On peut voir l’<strong>architecture microservices</strong> comme une évolution l’architecture <strong>SOA</strong> (Service Oriented Architecture), elle-même créée pour pallier aux inconvénients des <strong>applications monolithiques</strong>.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/microservices-etat-des-lieux_01.jpg" alt="microservices etat des lieux 01"></span></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Un des points intéressants à remarquer dans la transition SOA vers l’architecture microservices, est la <strong>suppression de l’ESB</strong> (Enterprise Service Bus).<br>
+La communication entre les services devait être la principale fonction de ce composant, mais il embarquait fréquemment une <strong>trop grande complexité métier</strong>.<br>
+Pour corriger cela, il a été <strong>remplacé par les endpoints REST des microservices</strong>.<br>
+Pour illustrer ce changement, Martin Fowler palera de <em>"Smart endpoints and Dumb pipes"</em></p>
+</li>
+<li>
+<p>On constate également que l&#8217;on ne travaille plus avec un seul et unique runtime, mais avec <strong>1 runtime par microservice</strong>, ce qui participe à garantir une de leurs principales caractéristiques :  l'<strong>isolation</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_linspiration_des_microservices">L&#8217;inspiration des microservices</h3>
+<div class="paragraph">
+<p>En 2005, Alistair Cockburn présentait l’<strong>architecture hexagonale</strong> (ou modèle <strong>“Ports and Adapters”</strong>) afin de permettre la conception d’applications pouvant être testées en <strong>isolation de leurs runtimes et bases de données</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Cela a été l’inspiration pour l’architecture microservices, dont Alistair donna ensuite la définition suivante : <em>“An architectural style or an approach for building IT systems as a set of business capabilities that are autonomous, self contained, and loosely coupled”</em></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_architecture_hexagonale">Architecture hexagonale</h3>
+<div class="imageblock">
+<div class="content">
+<img src="./images/microservices-etat-des-lieux_02.jpg" alt="microservices etat des lieux 02">
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Le principe fondateur de ce pattern est que <strong class="red">le métier ne doit dépendre de rien</strong> : TOUTES les dépendances vont de <strong>l’extérieur vers l’intérieur</strong>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Le but principal de cette architecture ne date pas d&#8217;hier, il est question de <strong>séparer clairement le métier de l&#8217;implémentation technique</strong> (notion d'<strong>isolation</strong>).</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Tout ce qui se trouve à <strong class="red">gauche de l&#8217;hexagone</strong> représente <strong class="red">les composants qui ont besoin de ce dernier</strong>.<br>
+On trouve côté gauche des <strong>interfaces exposées pour les composants ayant besoin d&#8217;invoquer le modèle</strong>. On parle d'<strong>API</strong>, pour <em>Application Provider Interfaces</em>.<br>
+&#8594; Les composants souhaitant communiquer avec notre métier le feront au travers d’<strong>adaptateurs qui contacteront nos API</strong>.</p>
+</li>
+<li>
+<p>Tout ce qui se trouve à <strong class="red">droite de l&#8217;hexagone</strong> représente <strong class="red">les composants dont ce dernier a besoin</strong>.<br>
+On trouve côté droit des <strong>interfaces exposées pour les composants que le modèle a besoin d’invoquer</strong>. On parle de <strong>SPI</strong>, pour <em>Service Provider Interfaces</em>.<br>
+&#8594; Les composants avec lesquels notre métier souhaite communiquer seront contactés au travers des <strong>SPI dont les implémentations seront résolues à l’exécution et fournies par des adaptateurs</strong>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_isolation">Isolation</h3>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/microservices-etat-des-lieux_03.jpg" alt="microservices etat des lieux 03">
+</div>
+</div>
+<div class="paragraph">
+<p>Comme nous le verrons plus en détail par la suite, la notion d'<strong>isolation</strong> est capitale pour les microservices, or <strong>l&#8217;isolation amène la redondance</strong>, et cette dernière, on nous a appris à la "combattre" depuis des dizaines d&#8217;années.<br>
+Rappelez-vous le principe introduit dans <a href="https://www.amazon.fr/Pragmatic-Programmer-Journeyman-Master/dp/020161622X"><em>The Pragmatic Programmer</em></a> : <strong>Don&#8217;t Repeat Yourself (DRY)</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Prenons le cas de 2 classes partageant un même comportement.<br>
+Comme on nous l&#8217;a appris en programmation OO, on aura généralement tendance à sortir ce comportement commun dans une classe de plus haut niveau, qui sera ensuite héritée.<br>
+Si on change le comportement de la classe mère, on impacte donc les 2 classes filles.<br>
+Cet héritage a donc augmenté le couplage entre nos classes.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>L&#8217;exemple précédent est&#8230;&#8203; juste un exemple pour illustrer un problème classique de couplage 😅<br>
+On pourrait faire différemment, en utilisant la composition ou d&#8217;autres patterns (ne me tappez pas&#8230;&#8203; 😉)</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Dans le cas des microservices, nous voulons éviter un maximum tout couplage, afin que ces derniers soient le plus <strong>indépendants</strong> possible.
+Donc, entre <strong>DRY et couplage</strong>, et <strong class="red">isolation et redondance</strong>, la 2nd approche est privilégiée.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">DDD et redondance</div>
+<div class="paragraph">
+<p>La conception des microservices plébiscite l&#8217;approche <strong>DDD</strong> (<strong>Domain Driven Design</strong>).<br>
+Cette approche, tout particulièrement le découpage en <strong>bounded context</strong>, nous encourage très fortement à limiter le couplage, quitte à "se répéter" par moment.<br>
+Ce qui fait pencher encore un peu plus la balance vers "l&#8217;isolation et redondance".</p>
+</div>
+<div class="paragraph">
+<p>Si vous voulez plus de détails sur ce point, je vous conseille l&#8217;excellente conférence <a href="https://www.youtube.com/watch?v=xZOO_CksS-E">Hexagonal at Scale, with DDD and microservices!</a> de Cyrille Martraire, lors du Voxxed Days Microservices Paris 2018.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pourquoi_les_microservices">Pourquoi les microservices ?</h3>
+<div class="paragraph">
+<p>Du fait du développement d’Internet, tout le monde communique avec tout le monde, et est en concurrence avec tout le monde.<br>
+L’émergence des microservices est la conséquence de l’<strong>évolution de nos applications</strong> pour faire face à ces nouveaux besoins :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Complexité croissante</strong><br>
+Les applications ne se limitent plus au seul data center de la compagnie, mais communiquent avec les services externes d’autres providers sur tout le globe.</p>
+</li>
+<li>
+<p><strong>Besoin de livrer de plus en plus vite</strong><br>
+Quand la concurrence est partout, il faut pouvoir faire évoluer son produit rapidement, et donc être capable de livrer des nouvelles fonctionnalités au plus tôt, sans devoir attendre de release complète.</p>
+</li>
+<li>
+<p><strong>Besoin de performance et de scalabilité</strong><br>
+Il faut être capable de s’adapter aux montées en charge d’un marché potentiellement mondial : très vite scaler sur de multiples serveurs, et libérer les ressources tout aussi vite quand le pic de charge est passé.</p>
+</li>
+<li>
+<p><strong>Doivent être toujours disponibles</strong><br>
+Du fait de la compétition de plus en plus sauvage, si votre application tombe, votre client part chez le concurrent&#8230;&#8203; Votre application doit être résiliente, et être capable de gérer les pannes (on parlera pour cela de <em>"Design for Failures"</em>).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Pour adresser ces problématiques, des sociétés comme Netflix, Amazon, eBay commencèrent à <strong>casser leurs monolithes</strong> en services :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>de petite taille, chacun ne remplissant qu’une fonction</p>
+</li>
+<li>
+<p>pouvant être <strong>déployés indépendamment</strong> les uns des autres.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ces services <strong>distribués</strong>, <strong>petits</strong>, <strong>simples</strong> et <strong>découplés</strong> permirent aux applications de devenir <strong>scalables</strong>, <strong>résilientes</strong> et <strong>flexibles</strong>.<br>
+&#8594; Ils prirent progressivement le nom de <strong>microservices</strong>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+La <strong>découpe des applications monolithiques</strong> en microservices est donc le <strong>Use Case d’origine</strong> des microservices.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_principaux_use_cases">Principaux Use Cases</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>"L’originel (le passé)" : Migration d’un monolithe vers une architecture microservices</p>
+</li>
+<li>
+<p>"L’actuel (le présent)" : Développement d’applications <strong>cloud-native</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>La transition aux applications Cloud-native est bien expliquée dans le <a href="https://www.amazon.fr/Spring-Microservices-Action-John-Carnell/dp/1617293989">Spring Microservices in Action</a> p5 :</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>You <strong>start</strong> building microservices because they give you a <strong>high degree of flexibility and autonomy</strong> with your development teams, but you and your team quickly find that the <strong>small, independent nature of microservices makes them easily deployable to the cloud</strong>.</p>
+</div>
+</blockquote>
+</div>
+<div class="sect2">
+<h3 id="_approche_cloud_native">Approche Cloud-native</h3>
+<div class="imageblock">
+<div class="content">
+<img src="./images/microservices-etat-des-lieux_04.jpg" alt="microservices etat des lieux 04">
+</div>
+<div class="title">Cloud-Native approach : <a href="https://pivotal.io/fr/cloud-native" class="bare">https://pivotal.io/fr/cloud-native</a></div>
+</div>
+<div class="paragraph">
+<p>Les microservices sont maintenant l’<strong>architecture "par défaut"</strong> pour bâtir des applications Cloud-native.</p>
+</div>
+<div class="paragraph">
+<p>L&#8217;approche Cloud-native a les grandes caractéristiques suivantes :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Architecture microservices</strong> : implique de <strong>multiples équipes indépendates</strong>, travaillant à l&#8217;amélioration du système.</p>
+</li>
+<li>
+<p><strong>Continuous Delivery</strong> : Le CD représente un <strong>process d&#8217;automatisation</strong> permettant aux développeurs de <strong>déployer rapidement</strong> vers les environnements de prodution</p>
+</li>
+<li>
+<p><strong>DevOps</strong> : La culture DevOps rapproche développeurs et OPs, et les aide à livrer une meilleure <strong>valeur partagée</strong> au client.</p>
+</li>
+<li>
+<p><strong>Containerized</strong> : La notion de container est capitale, car ce sont ces derniers qui permettent aux applications de pouvoir être déployées <strong>n&#8217;importe où</strong>.<br>
+Ce qui importe n&#8217;est pas OU ces dernières sont déployées, mais COMMENT elles le sont.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Voici une définition de l&#8217;approche Cloud-native que j&#8217;aime particulièrement :</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Cloud native is an approach for building applications as micro-services and <strong>running</strong> them on a <strong>containerised and dynamically orchestrated platforms</strong> that <strong>fully exploits the advantages of the Cloud computing model</strong>.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; <a href="https://medium.com/walmartlabs/cloud-native-application-architecture-a84ddf378f82">Cloud Native Application Architecture</a>
+</div>
+</div>
+<div class="paragraph">
+<p>On y parle d&#8217;exploiter les avantages qu&#8217;offre la conception dans le Cloud, afin de répondre aux nombreuses contraintes inhérentes au développement de microservices.<br>
+En effet, le développement de ces derniers est complexe, principalement car <strong>ils sont nombreux</strong>.<br>
+On ne développe jamais un mais <strong>DES</strong> microservices, dont il faut assurer la communication, le cycle de vie, le monitoring, etc etc.
+Tout cela nécessite la mise en place d&#8217;un <strong>environnement complexe</strong>, on parlera de <strong class="red">capability model</strong>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Ce terme de <strong>capability model</strong> n&#8217;est pas si courant dans la littérature sur les microservices, mais je le trouve très approprié.<br>
+La gestion des logs, le monitoring centralisé, la découverte des services, etc. sont autant de "capabilities" qu&#8217;il est nécessaire de mettre en place pour assurer le bon fonctionnement de nos microservices.</p>
+</div>
+<div class="paragraph">
+<p>A la base, je l&#8217;ai trouvé dans l&#8217;excellent article <a href="https://hub.packtpub.com/capability-model-microservices/">A capability model for microservices</a> de Rajesh RV, l&#8217;auteur de <a href="https://www.packtpub.com/application-development/spring-microservices">Spring Microservices</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_capability_model">Capability model</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>La conception de microservices ne se limite pas au simple code du service lui-même, l&#8217;environnement, le <strong>capability model</strong> comme nommé précédemment, est essentiel.</p>
+</div>
+<div class="paragraph">
+<p>Faisons apparaître ses "capabilities" progressivement :</p>
+</div>
+<div class="videoblock">
+<div class="content">
+<video src="./images/microservices-etat-des-lieux_05.mp4#t=0,10" width="1000" autoplay controls>
+Your browser does not support the video tag.
+</video>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_microservice_core">Microservice "core"</h3>
+<div class="paragraph">
+<p>Nous commençons par le codage d&#8217;un premier microservice, qui, techniquement, n&#8217;est qu&#8217;un service "classique".
+L&#8217;une de ses principales caractéristiques est de disposer d&#8217;une <strong>persistance dédiée</strong>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_api">API</h3>
+<div class="paragraph">
+<p>Ce dernier va très rapidement devoir communiquer avec d&#8217;autres microservices, ce qui se fera au travers d'<strong>API</strong>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_service_discovery">Service Discovery</h3>
+<div class="paragraph">
+<p>Afin que nos microservices puissent se trouver les uns les autres, ils s’enregistrent auprès d’un <strong>Service Discovery</strong>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_load_balancer">Load Balancer</h3>
+<div class="paragraph">
+<p>Dès lor que vous avez <strong>plusieurs instances d&#8217;un même microservice</strong>, vous avez besoin d&#8217;un <strong>Load Balancer</strong> pour distribuer le trafic et la charge.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_api_gateway">API gateway</h3>
+<div class="paragraph">
+<p>Il faut proposer un <strong>point d&#8217;entrée unique</strong> pour tous vos services.<br>
+C&#8217;est le rôle L'<strong>API gateway</strong>, qui, de ce fait, est également le lieu idéal pour implémenter certains aspects transverses comme le <strong>routage statique</strong> et le <strong>routage dynamique</strong>.<br>
+Par exemple, en fonction de certaines données de la requête arrivante, on dirige une population de beta-testeurs sur une version spécifique de certains services.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_communication_entre_microservices">Communication entre microservices</h3>
+<div class="paragraph">
+<p>Les microservices peuvent communiquer / être appelés de 2 façons différentes, <strong>synchrone</strong> ou <strong>asynchrone</strong>.</p>
+</div>
+<div class="sect3">
+<h4 id="_synchrone">Synchrone</h4>
+<div class="paragraph">
+<p>Implémentée au travers d'<strong>appel REST en HTTP</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Ce type de communication est généralement privilégié pour des <strong>services externes</strong>.<br>
+Il est en effet idéal pour des requêtes externes, car permettant de gérer facilement les <strong>intéractions temps-réel</strong> avec un client.<br>
+Néanmoins, son <strong>inconvénient</strong> est d'<strong>augmenter le couplage</strong> entre 2 microservices.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_asynchrone">Asynchrone</h4>
+<div class="paragraph">
+<p>Communication <strong>Event Driven</strong>, implémentée via la mise en place d&#8217;un <strong>bus d&#8217;évènements</strong> (protocoles d&#8217;envoi de messages asynchrones AMQP, STOMP, MQTT et outils comme RabbitMQ, ActiveMQ), ou d&#8217;un <strong>mécanisme de Pub/Sub</strong> (<strong>Kafka</strong> est le roi incontesté de ce domaine&#8230;&#8203;).</p>
+</div>
+<div class="paragraph">
+<p>Ce type de communication est privilégié pour les échanges relatif à la "mécanique interne" d&#8217;une fonctionnalité rendue par un ensemble de microservices (en d&#8217;autres termes, la "plomberie", ce qui n&#8217;est pas exposé au client)<br>
+Dans ces cas, le client n&#8217;attend généralement pas de réponse immédiate, voire n&#8217;en attend tout simplement pas.<br>
+Ces échanges étant plus répandus que les besoins d&#8217;intéractions temps réel, la communication asynchrone est la plus fréquemment rencontrée pour les microservices.</p>
+</div>
+<div class="paragraph">
+<p>Ses avantages sont :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>meilleur découplage</strong> des microservices</p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Attention toutefois, on peut devenir dépendant (donc re-couplage) de la version du type de message.<br>
+Exemple: JSON ne supporte pas nativement le versioning, contrairement à Avro (poussé par Kafka)
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><strong>meilleure résilience</strong> : le message reste dans la queue même si le consommateur est down.</p>
+</li>
+<li>
+<p><strong>meilleure scalabilité</strong> : pas besoin d&#8217;attendre une réponse du consommateur du message.</p>
+</li>
+<li>
+<p><strong>meilleure flexibilité</strong> : émetteur et consommateur ne se connaissent pas, on peut donc ajouter de nouveaux consommateurs sans impacter l’émetteur.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Côté inconvénients :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>il faut se méfier de la gestion de l'<strong>ordre des messages</strong>.</p>
+</li>
+<li>
+<p><strong>debugging plus compliqué</strong> : l&#8217;exécution n&#8217;étant plus linéaire.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuration_management">Configuration management</h3>
+<div class="paragraph">
+<p>Vos microservices étant nombreux, vous n&#8217;allez pas gérer la configuration de chacun d&#8217;eux séparemment, il va donc falloir <strong>centraliser leur configuration</strong>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_design_for_failure">Design for failure</h3>
+<div class="paragraph">
+<p>Les microservices sont des systèmes distribués, pour éviter tout problème de réseau, ou que la défaillance d’un service (ou instance de service) n’impacte les autres, vous devez penser à la résilience de l’application dès sa conception, ce qu’on appelle le <strong>Design for failure</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Voici les principaux patterns à mettre en place :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>circuit breaker</strong> : pour éviter que l’on continue d’appeler un microservice défaillant, permet le <strong>fail fast</strong>.</p>
+</li>
+<li>
+<p><strong>fallback</strong> : propose un comportement alternatif en cas de défaillance d’un microservice (exemples : accès à une autre source de données, queueing de la requête, etc.)</p>
+</li>
+<li>
+<p><strong>bulkhead</strong> : on sépare les appels aux ressources distantes dans des thread pools différents (pour éviter qu’un service défaillant ne vampirise les ressources)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_et_tracing">Logging et tracing</h3>
+<div class="paragraph">
+<p>Notre bon vieux monolithe a cédé la place à plusieurs dizaines ou centaines de microservices, en conséquence, la gestion des logs et du tracing est devenue bien plus compliquée.</p>
+</div>
+<div class="paragraph">
+<p>Chaque microservice a ses propres logs, et une transaction utilisateur peut impliquer plusieurs de ces derniers.<br>
+Les patterns suivants permettent de ne pas se noyer dans cette masse de données :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>log correlation</strong> : via un <strong>ID de corrélation</strong>, permet de suivre les logs d’une transaction entre différents services</p>
+</li>
+<li>
+<p><strong>log aggregation</strong> : regroupe toutes les logs en 1 même persistance</p>
+</li>
+<li>
+<p><strong>tracing distribué</strong> : permet de visualiser le flux / workflow d’une transaction utilisateur au travers des différents microservices</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sécurité">Sécurité</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Authentification</strong> : permet de savoir QUI veut se connecter à vos services</p>
+</li>
+<li>
+<p><strong>Autorisation</strong> : permet de savoir si l&#8217;utilisateur, précédemment authentifié, a bien le droit d&#8217;entreprendre l&#8217;action qu&#8217;il souhaite (gestion de droits)</p>
+</li>
+<li>
+<p><strong>Délégation d’accès</strong> : pour éviter que le service client n’ait systématiquement à représenter ses credentials pour chacun des services impliqués dans la transaction</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_patterns_de_build_et_de_déploiement">Patterns de build et de déploiement</h3>
+<div class="paragraph">
+<p>Nos microservices sont nombreux, on ne va pas pouvoir chacun les déployer, ou les redémarrer (gestion de panne), "à la main", d&#8217;où la mise en place des patterns suivants :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>CI/CD</strong> : implique la mise en place d&#8217;un pipeline de build et de déploiement automatisé.</p>
+</li>
+<li>
+<p><strong>Infrastructure as code</strong> : permet de considérer le provisioning des nos services comme du code pouvant être géré par un gestionnaire de sources.</p>
+</li>
+<li>
+<p><strong>Immutable infrastructure</strong> : Une fois qu&#8217;un service est déployé, l&#8217;infrastructure sur laquelle il tourne ne doit plus pouvoir être modifiée par un humain.<br>
+Cela renforce la stabilité du système, en garantissant qu&#8217;aucune modification ne peut se retrouver en PROD, dans le code déployé, mais nulle part ailleurs&#8230;&#8203;</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2019-09-08 21:34:35 UTC
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
+</body>
+</html>

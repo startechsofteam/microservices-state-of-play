@@ -1,0 +1,8 @@
+= Microservices : un état des lieux en 2019
+
+Ce repo stocke un article sur un état des lieux des microservices courant 2019. +
+Il retrace l'histoire des microservices, depuis leur création jusqu'à nos jours, et décrit l'environnement technique (le capability model) nécessaire à leur bon fonctionnement.
+
+L'article est accessible via les GitHub Pages du repo :
+https://softeamgroup.github.io/microservices-state-of-play/
+

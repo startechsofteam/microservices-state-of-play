@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<meta name="author" content="Thomas SCHWENDER">
+<meta name="author" content="Thomas SCHWENDER, Softeam Group">
 <title>Microservices : un état des lieux</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -444,6 +444,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Thomas SCHWENDER</span><br>
 <span id="email" class="email"><a href="https://github.com/ardemius">@ardemius</a></span><br>
+<span id="author2" class="author">Softeam Group</span><br>
+<span id="email2" class="email"><a href="https://softeamgroup.fr" class="bare">https://softeamgroup.fr</a></span><br>
+<span id="revnumber">version 1.0,</span>
+<span id="revdate">31/08/2019</span>
 </div>
 </div>
 <div id="content">
@@ -597,7 +601,7 @@ On pourrait faire différemment, en utilisant la composition ou d&#8217;autres p
 </table>
 </div>
 <div class="paragraph">
-<p>Dans le cas des microservices, nous voulons éviter un maximum tout couplage, afin que ces derniers soient le plus <strong>indépendants</strong> possible.
+<p>Dans le cas des microservices, nous voulons éviter au maximum tout couplage, afin que ces derniers soient le plus <strong>indépendants</strong> possible.
 Donc, entre <strong>DRY et couplage</strong>, et <strong class="red">isolation et redondance</strong>, la 2nd approche est privilégiée.</p>
 </div>
 <div class="admonitionblock note">
@@ -792,8 +796,21 @@ Your browser does not support the video tag.
 <div class="sect2">
 <h3 id="_microservice_core">Microservice "core"</h3>
 <div class="paragraph">
-<p>Nous commençons par le codage d&#8217;un premier microservice, qui, techniquement, n&#8217;est qu&#8217;un service "classique".
-L&#8217;une de ses principales caractéristiques est de disposer d&#8217;une <strong>persistance dédiée</strong>.</p>
+<p>Rappelons les caractéristiques des microservices :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>"petits"</strong> : comprendre par là qu&#8217;ils n&#8217;assurent la responsabilité que d&#8217;un point précis d&#8217;un domaine métier.</p>
+</li>
+<li>
+<p><strong>faiblement couplés</strong> : donc indépendants, et devant être <strong>déployés indépendamment les uns des autres</strong>.<br>
+Pour aider à cela, il est préconisé que chaque microservice dispose d&#8217;une <strong>persistance dédiée</strong>.</p>
+</li>
+<li>
+<p><strong>distribués</strong></p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -825,7 +842,10 @@ Par exemple, en fonction de certaines données de la requête arrivante, on diri
 <div class="sect2">
 <h3 id="_communication_entre_microservices">Communication entre microservices</h3>
 <div class="paragraph">
-<p>Les microservices peuvent communiquer / être appelés de 2 façons différentes, <strong>synchrone</strong> ou <strong>asynchrone</strong>.</p>
+<p>Les microservices communiquent entre eux avec un <strong>protocole léger</strong> et <strong>indépendant de leur technologie</strong>.</p>
+</div>
+<div class="paragraph">
+<p>la communication peut être <strong>synchrone</strong> ou <strong>asynchrone</strong>.</p>
 </div>
 <div class="sect3">
 <h4 id="_synchrone">Synchrone</h4>
@@ -987,7 +1007,8 @@ Cela renforce la stabilité du système, en garantissant qu&#8217;aucune modific
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-08 21:34:35 UTC
+Version 1.0<br>
+Last updated 2019-09-14 00:19:24 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

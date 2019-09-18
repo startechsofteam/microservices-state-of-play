@@ -40,6 +40,8 @@ Pour illustrer ce changement, Martin Fowler palera de _"Smart endpoints and Dumb
 
 * On constate également que l'on ne travaille plus avec un seul et unique runtime, mais avec *1 runtime par microservice*, ce qui participe à garantir une de leurs principales caractéristiques :  l'*isolation*.
 
+NOTE: par "runtime", il faut entendre serveur (comme Tomcat ou Jetty)
+
 === L'inspiration des microservices
 
 En 2005, Alistair Cockburn présentait l’*architecture hexagonale* (ou modèle *“Ports and Adapters”*) afin de permettre la conception d’applications pouvant être testées en *isolation de leurs runtimes et bases de données*.
@@ -275,11 +277,114 @@ Nos microservices sont nombreux, on ne va pas pouvoir chacun les déployer, ou l
 * *Immutable infrastructure* : Une fois qu'un service est déployé, l'infrastructure sur laquelle il tourne ne doit plus pouvoir être modifiée par un humain. +
 Cela renforce la stabilité du système, en garantissant qu'aucune modification ne peut se retrouver en PROD, dans le code déployé, mais nulle part ailleurs...
 
+== Implémentation de microservices
 
+Plusieurs stack techniques peuvent être utilisées pour créer nos microservices, et mettre en place le capability model associé. +
+Les plus connues sont *Spring* et *MicroProfile*.
 
+=== Stack Spring
 
+image::microservices-etat-des-lieux_06.jpg[align="center"]
 
+Au sein de l'écosystème Spring, les projets Boot et Cloud sont ceux permettant d'implémenter des microservices.
 
+==== Spring Boot
+
+Le but de *Spring Boot* est de simplifier la création de microservices *orientés REST / JSON*. +
+Il permet de créer ceux-ci simplement, au travers d'*annotations*. +
+La configuration du build est facilitée via le *regroupement des dépendances* au sein de "*starters*" spécifiques (`spring-boot-starter-web`, `spring-boot-starter-data-jpa`, etc.).
+
+Spring Boot crée des *applications stand-alone*, ne nécessitant pas d'être lancées au travers d'un serveur d'applications "externe", car *embarquant leur propre serveur* (Tomcat, Jetty, Undertow). +
+On parlera d'*Uber jars*.
+
+==== Spring Cloud
+
+Le projet Spring Cloud *encapsule plusieurs frameworks populaires*, assurant des fonctionnalités du capability model des microservices, au sein d'un framework commun. On parle de projet parapluie (*"Umbrella" project*) +
+Celui-ci permet de faciliter l'usage et le déploiement de ces technologies, et de les rendre accessibles au travers de simples annotations.
+
+Parmi les projets composant Spring Cloud, on peut citer :
+
+* *Spring Cloud Netflix* : intègre la suite Netflix OSS (Zuul, Eureka, Ribbon, Hystrix, etc.)
+* *Spring Cloud Consul* : intègre Hashicorp Consul (service discovery)
+* *Spring Cloud Sleuth* : tracing distribué via l’ajout d’un ID de corrélation
+* *Spring Cloud Security* : framework d’authentification et d’autorisation (OAuth2)
+* *Spring Cloud Stream* : framework facilitant l’intégration de brokers de message (RabbitMQ, Kafka) pour la communication asynchrone.
+* et https://spring.io/projects/spring-cloud[bien d'autres encore]
+
+=== Stack Eclipse MicroProfile
+
+image::microservices-etat-des-lieux_07.jpg[align="center"]
+
+==== Pourquoi la création de MicroProfile ?
+
+MicroProfile s'appuie sur des spécifications venant de *JEE* (JEE 7 pour les premières versions).
+
+A priori, parlez de JEE ces dernières années pour le développement de microservices semble être synonyme de se tirer une balle dans le pied... +
+Après tout, *JEE est une spécification pour des serveurs d'application dédiés à des applications monolithiques*, et l'on a Spring Boot et Cloud sous la main qui sont spécialement conçus pour ce type de développement. +
+JEE, avec toutes les JSRs de la plateforme complète, semble trop "lourd" pour les microservices :
+
+image::microservices-etat-des-lieux_08.jpg[align="center"]
+
+Fort de ce constat, voyant que Java EE n'arrivait plus à évoluer assez vite face aux changements de l'industrie, et conscients des investissement déjà réalisés dans la technologie, plusieurs entreprises et éditeurs de logiciel (Red Hat, IBM, Tomitribe, Payara), soutenus par la communauté Java, ont décidé de créer *MicroProfile*, une *plateforme optimisée pour l'architecture microservices*, basée sur JEE.
+
+==== Just Enough Application Server (JeAS)
+
+"Just Enough Application Server"... Le nom seul du concept est éloquent.
+
+Historiquement, un serveur d'application, c'était *"one size fits all"*. On n'avait pas le choix, notre application devait tourner sur un serveur incluant toutes les JSRs de la plateforme JEE. +
+Mais le principe de *JeAS* est justement d'*inverser la relation entre le serveur d'application et l'application*, vous permettant de ne packager que les fonctionnalités du serveur d'application requises par votre application.
+
+image::microservices-etat-des-lieux_09.jpg[align="center"]
+
+Les avantages de cette approche sont les suivants :
+
+* *Réduction de la taille de l'application* : comparée à la somme d'une application classique PLUS le serveur d'application
+* *Réduction de la mémoire allouée* : va dépendre du nombre de classes qui n'auront plus besoin d'être chargées
+* *Réduction de la surface d'attaque* : moins de ports d'ouverts, moins de services qui tournent
+* *Meilleure séparation entre les applications* : comparé à un serveur d'application dans lequel on avait généralement plusieurs applications de déployées
+* *Mises à jour simplifiées* : la mise à jour ne concerne plus qu'UNE application
+
+Parmi les runtimes implémentant JeAS, on peut citer *RedHat Thorntail* (anciennement WildFly Swarm), *IBM Open Liberty*, *TomEE de Tomitribe*, et plusieurs autres encore.
+
+Vu comme cela, le principe semble plutôt simple, et avoir beaucoup d'avantage, alors... *Mais pourquoi ne pas avoir fait cela avant ?!* +
+-> Tout simplement parce qu'à l'époque, *le coût du matériel était bien plus élevé qu'aujourd'hui*. Mieux valait donc minimiser le nombre de machines. +
+De nos jours, avec *l’avènement des VM et des containers*, le constat n'est plus le même.
+
+==== Description d'Eclipse MicroProfile
+
+image::microservices-etat-des-lieux_10.jpg[align="center"]
+
+Eclipse MicroProfile crée des spécifications pour des *microservices* en *Java Enterprise*, avec le bénéfice que ces derniers soient *portables entre runtimes JeAS* supportant Eclipse MicroProfile.
+
+Le projet est passé à la fondation Eclipse fin 2016 (MicroProfile v1.0) +
+Il s'appuyait à la base sur des spécifications venant de *JEE 7*, et de *JEE 8* (Jakarta EE) dans les dernières versions.
+
+Comme expliqué précédemment, la motivation derrière la création de MicroProfile était l’impression de plusieurs éditeurs que l’acteur historique (Oracle) avait du mal à se motiver pour faire évoluer la plateforme. +
+MicroProfile était là pour *redonner une dynamique* (3 releases par an) et une *architecture moderne* (et Oracle a maintenant rejoint l’initiative).
+
+==== Implémentations de MicroProfile
+
+Voici les différentes implémentations ayant validées le *TCK* (Technology Compability Kit) pour *MicroProfile 3.0* (07/06/2019) :
+
+* *Helidon* 1.3.0 (Open Source, poussé par Oracle)
+* *Thorntail* 2.5.0 (Open Source, poussé par RedHat)
+* *Open Liberty* 19.0.0.7 (Open Source, poussé par IBM)
+* IBM *WebSphere Liberty* 19.0.0.7
+
+Celles en train de le passer sont :
+
+* Quarkus
+* KumuluzEE
+* Payara Server 5.193
+* Payara Micro 5.193
+* TomEE 8.0.0-M4
+
+[NOTE]
+====
+Le 11/04/2019, Ken Finnigan, co-fondateur et leader de RedHat Thorntail a annoncé que les travaux sur Thorntail 4.x étaient arrêtés au profit du développement de *Quarkus*, qui en représente l'évolution.
+
+Les livraisons de Thorntail 2.x seront poursuivies pendant 18 mois, pendant lesquels ses utilisateurs seront incités à passer sur WildFly ou Quarkus.
+====
 
 
 

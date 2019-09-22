@@ -1,8 +1,13 @@
 = Microservices : un état des lieux en 2019
 
-Ce repo stocke un article sur un état des lieux des microservices courant 2019. +
+Ce repo stocke le code source d'un article décrivant un *état des lieux des microservices courant 2019*. +
 Il retrace l'histoire des microservices, depuis leur création jusqu'à nos jours, et décrit l'environnement technique (le capability model) nécessaire à leur bon fonctionnement.
 
-L'article est accessible via les GitHub Pages du repo :
+Cet article est basé sur une *université* que nous avons donné lors de *Devoxx France 2019*, et dont le repo est disponible ici : https://github.com/Ardemius/microservices-spring-vs-microprofile +
+(L'article a été écrit dans ce repo avant d'être copié ici)
+
+L'article est accessible via les *GitHub Pages* du repo :
 https://softeamgroup.github.io/microservices-state-of-play/
+
+
 

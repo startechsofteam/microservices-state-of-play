@@ -7,7 +7,7 @@ Cet article est basé sur une *université* que nous avons donné lors de *Devox
 (L'article a été écrit dans ce repo avant d'être copié ici)
 
 L'article est accessible via les *GitHub Pages* du repo :
-https://softeamgroup.github.io/microservices-state-of-play/
+https://startechsofteam.github.io/microservices-state-of-play/
 
 
 
